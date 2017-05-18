@@ -15,7 +15,7 @@ class DiagOutput():
         self.reqchan.basic_consume(self.reqcallback,queue=queue_name,no_ack=True)
 
     def start(self):
-        print("Listening for new documents ...")
+        print "Listening for new documents ..."
         self.reqchan.start_consuming()
 
     def reqcallback(self,ch,method,properties,body):
@@ -23,7 +23,7 @@ class DiagOutput():
         if response['command'] == 'found_doc':
             docurl = response['message']['docurl']
             linktext = response['message']['linktext']
-            print("{0}: {1}".format(linktext,docurl))
+            print "{0}: {1}".format(linktext,docurl)
 
 def main():
     diagoutput = DiagOutput()

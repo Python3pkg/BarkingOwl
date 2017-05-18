@@ -6,7 +6,7 @@ import time
 import threading
 import datetime
 
-from .scraper import Scraper
+from scraper import Scraper
 
 from barking_owl.busaccess import BusAccess
 
@@ -38,7 +38,7 @@ class ScraperWrapper(object): #threading.Thread):
         self.uid = uid
         self._DEBUG=DEBUG
 
-        print("ScraperWrapper().__init__(): Creating scraper ...")
+        print "ScraperWrapper().__init__(): Creating scraper ..."
  
         self.scraper = Scraper(
             DEBUG = self._DEBUG,
@@ -46,7 +46,7 @@ class ScraperWrapper(object): #threading.Thread):
         self.scraping = False
         self.scraper_thread = None
 
-        print("ScraperWrapper().__init__(): Scraper Created.")
+        print "ScraperWrapper().__init__(): Scraper Created."
 
         self.stopped = False
 
@@ -94,12 +94,12 @@ class ScraperWrapper(object): #threading.Thread):
     def broadcast_status(self):
 
         if self._DEBUG == True:
-            print("ScraperWrapper().broadcast_status(): Entering status loop.")
+            print "ScraperWrapper().broadcast_status(): Entering status loop."
         
         while not self.scraping and not self.stopped:
 
             if self._DEBUG == True:
-                print("ScraperWrapper.broadcast_status() sending status pulse ...")
+                print "ScraperWrapper.broadcast_status() sending status pulse ..."
 
             if self.scraping == False and self.scraper._data['working'] == False:
                 packet = {
@@ -177,10 +177,10 @@ class ScraperWrapper(object): #threading.Thread):
 
     def _scraperstart(self):
         if self._DEBUG == True:
-            print("ScraperWrapper()._scraperstart(): Starting scraper ...")
+            print "ScraperWrapper()._scraperstart(): Starting scraper ..."
         documents = self.scraper.start()
         if self._DEBUG == True:
-            print("ScraperWrapper()._scraperstart(): Scraper complete.")
+            print "ScraperWrapper()._scraperstart(): Scraper complete."
             #print documents
         self.scraping = False
 
@@ -189,7 +189,7 @@ class ScraperWrapper(object): #threading.Thread):
             response = payload
            
             if self._DEBUG == True:
-                print("ScraperWrapper()._reqcallback(): new message: {0}".format(response))
+                print "ScraperWrapper()._reqcallback(): new message: {0}".format(response)
  
             if response['command'] == 'url_dispatch':
                 if response['destination_id'] == self.uid:
@@ -224,6 +224,6 @@ class ScraperWrapper(object): #threading.Thread):
             elif response['command'] == 'global_shutdown':
                 #log( "ScraperWrapper._reqcallback(): Global Shutdown Recieved", self.DEBUG )
                 self.stop()
-        except Exception as e:
-            print("ScraperWrapper._reqcallback(): ERROR: {0}".format(str(e)))
-            print(traceback.format_exc())
+        except Exception, e:
+            print "ScraperWrapper._reqcallback(): ERROR: {0}".format(str(e))
+            print traceback.format_exc()

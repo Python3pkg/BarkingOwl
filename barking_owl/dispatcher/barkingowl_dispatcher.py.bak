@@ -1,7 +1,7 @@
 import daemon
 
 import datetime
-from .dispatcher import Dispatcher
+from dispatcher import Dispatcher
 
 def StartDispatcher():
 
@@ -38,14 +38,14 @@ def StartDispatcher():
             urls = []
             urls.append(url)
 
-            print("Seting URLs ...")
+            print "Seting URLs ..."
             dispatcher.set_urls(urls)
-            print("Done.")
+            print "Done."
 
             # note: blocking
-            print("Starting dispatcher ...")
+            print "Starting dispatcher ..."
             dispatcher.start()
-            print("Done.")
+            print "Done."
 
         #except Exception, e:
         #    print "Error: {0}".format(e)

@@ -2,9 +2,9 @@ import os
 import json
 import datetime
 from optparse import OptionParser
-from .scraper import Scraper
+from scraper import Scraper
 import requests
-from urllib.parse import urlsplit
+from urlparse import urlsplit
 from random import randint
 
 _DEBUG = False
@@ -15,7 +15,7 @@ _DOCUMENT_COUNT = 0
 
 def handle_doc(_data, document_url):
     if _DEBUG == True:
-        print("    New Document: {0} : {1}\n".format(document_url['tag_text'], document_url['url']))
+        print "    New Document: {0} : {1}\n".format(document_url['tag_text'], document_url['url'])
 
     if _DOWNLOAD_DOCUMENTS == True:
         
@@ -25,12 +25,12 @@ def handle_doc(_data, document_url):
         if not os.path.isdir(_DOCUMENT_DIRECTORY):
             os.makedirs(_DOCUMENT_DIRECTORY)
 
-        print("    Downloading document to '{0}' ...".format(filename))
+        print "    Downloading document to '{0}' ...".format(filename)
 
         with open(filename, 'w') as f:
             response = requests.get(document_url['url'], stream=True)
             if not response.ok:
-                print("    ERROR! File could not be downloaded.\n")
+                print "    ERROR! File could not be downloaded.\n"
                 return
             for block in response.iter_content(1024):
                 if not block:
@@ -39,7 +39,7 @@ def handle_doc(_data, document_url):
         global _DOCUMENT_COUNT
         _DOCUMENT_COUNT += 1
 
-        print("    Done.\n")
+        print "    Done.\n"
 
 if __name__ == '__main__':
 
@@ -87,7 +87,7 @@ if __name__ == '__main__':
             _DEBUG = True
 
         if _DEBUG == True:
-            print(" -- CLI BarkingOwl Scraper -- ")
+            print " -- CLI BarkingOwl Scraper -- "
 
         if options.download_documents == True:
             _DOWNLOAD_DOCUMENTS = True
@@ -121,16 +121,16 @@ if __name__ == '__main__':
             scraper.set_url_data(url)
 
             if _DEBUG == True:
-                print("\nStarting Scraper on {0} ...\n\n".format(options.target_url))
+                print "\nStarting Scraper on {0} ...\n\n".format(options.target_url)
             data = scraper.start()
             if _DEBUG == True:
-                print("\n\nScraper complete.\n")
+                print "\n\nScraper complete.\n"
 
             if _DEBUG == True:
-                print("BarkingOwl Scraper found {0} documents on {1}.\n\n".format(
+                print "BarkingOwl Scraper found {0} documents on {1}.\n\n".format(
                     len(data['documents']),
                     options.target_url,
-                ))
+                )
 
             if options.json_output == True:
                 data = scraper._data
@@ -138,8 +138,8 @@ if __name__ == '__main__':
                     if isinstance(data[key], datetime.datetime) or \
                             isinstance(data[key], datetime.timedelta):
                         data[key] = str(data[key])
-                print(json.dumps(scraper._data, sort_keys=True,
-                    indent=4, separators=(',', ': ')))
+                print json.dumps(scraper._data, sort_keys=True,
+                    indent=4, separators=(',', ': '))
 
         #except:
         #    if DEBUG == True:
@@ -147,4 +147,4 @@ if __name__ == '__main__':
         #    else:
         #        print '{"error_text": " An error occured while the scraper was running."}'
     else:
-        print("Error: missing CLI arguments.  Try -h for help.")
+        print "Error: missing CLI arguments.  Try -h for help."

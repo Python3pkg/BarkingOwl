@@ -52,7 +52,7 @@ class Dispatcher():
 
     def set_urls(self,urls):
         if self._DEBUG == True:
-            print("Dispatcher.set_urls(): loading url data")
+            print "Dispatcher.set_urls(): loading url data"
         for i in range(0,len(urls)):
             urls[i]['start_datetime'] = None
             urls[i]['finish_datetime'] = None
@@ -62,9 +62,9 @@ class Dispatcher():
 
     def get_next_url_index(self):
 
-        print("\n")
-        print(self.urls)
-        print("\n")
+        print "\n"
+        print self.urls
+        print "\n"
 
         url_index = -1
         for i in range(0,len(self.urls)):
@@ -150,38 +150,38 @@ class Dispatcher():
 
             if response['command'] == 'scraper_available':
                 if self._DEBUG == True:
-                    print("Dispatcher._reqcallback(): Scraper availability seen")
+                    print "Dispatcher._reqcallback(): Scraper availability seen"
                 if self.self_dispatch == True:
                     if self._DEBUG == True:
-                        print("Dispatcher._reqcallback(): Self dispatching")
+                        print "Dispatcher._reqcallback(): Self dispatching"
                     url_index = self.get_next_url_index()
                 else:
                     if self._DEBUG == True:
-                        print("Dispatcher._reqcallback(): Not self dispatching, getting durrent url index ...")
-                        print("len(self.urls): {0}, self.current_url_index: {1}, len(self.urls)-1: {2}".format(
+                        print "Dispatcher._reqcallback(): Not self dispatching, getting durrent url index ..."
+                        print "len(self.urls): {0}, self.current_url_index: {1}, len(self.urls)-1: {2}".format(
                             len(self.urls), self.current_url_index, len(self.urls)-1,
-                        ))
+                        )
                     url_index = -1
                     if len(self.urls) != 0 and self.current_url_index <= len(self.urls)-1:
                         url_index = self.current_url_index
                         self.current_url_index+=1
                     else:
                         if self._DEBUG == True:
-                            print("Dispatcher._reqcallback(): All queued URLs dispatched")
+                            print "Dispatcher._reqcallback(): All queued URLs dispatched"
                 if not url_index == -1:
                     if self._DEBUG == True:
-                        print("Dispatcher._reqcallback(): Dispatching URL")
+                        print "Dispatcher._reqcallback(): Dispatching URL"
                     self.urls[url_index]['start_datetime'] = str(datetime.datetime.now())
                     self.urls[url_index]['scraper_id'] = response['source_id']
                     self.urls[url_index]['status'] = 'running'
                     self.send_url(url_index,response['source_id'])
                 else:
                     if self._DEBUG == True:
-                        print("Dispatcher._reqcallback(): No URLs to dispatch")
+                        print "Dispatcher._reqcallback(): No URLs to dispatch"
 
             if response['command'] == 'global_shutdown':
                 if self._DEBUG == True:
-                    print("Exiting.")
+                    print "Exiting."
                 self.stop()
         #except Exception, e:
         #    print "BarkingOwl Dispatcher, ERROR: {0}".format(str(e))

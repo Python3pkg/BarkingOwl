@@ -1,15 +1,15 @@
 import datetime
 import time
 #import resource
-import urllib.request, urllib.parse, urllib.error
-import urllib.request, urllib.error, urllib.parse
-import urllib.parse
+import urllib
+import urllib2
+import urlparse
 from bs4 import BeautifulSoup
 import tldextract
 import requests
 import magic
 import json
-from .interface import URLCheck
+from interface import URLCheck
 import traceback
 
 VERSION = "v0.8.0"
@@ -85,7 +85,7 @@ class Scraper(object):
             try:
                 self._start_callback(self._data)
             except:
-                print(traceback.format_exc())
+                print traceback.format_exc()
                 pass
 
     def _stop(self):
@@ -93,21 +93,21 @@ class Scraper(object):
             try:
                 self._finished_callback(self._data)
             except:
-                print(traceback.format_exc())
+                print traceback.format_exc()
                 pass
     def _found_doc(self, document_url):
         if not self._found_doc_callback == None:
             try:
                 self._found_doc_callback(self._data, document_url['url'])
-            except Exception as e:
-                print("Scraper._found_doc(): ERROR: {0}".format(e))
+            except Exception, e:
+                print "Scraper._found_doc(): ERROR: {0}".format(e)
 
     def _new_url(self, url):
         if not self._new_url_callback == None:
             try:
                 self._new_url_callback(self._data, url)
             except:
-                print(traceback.format_exc())
+                print traceback.format_exc()
                 pass
 
     def _bandwidth_limit(self):
@@ -115,7 +115,7 @@ class Scraper(object):
             try:
                 self._bandwidth_limit_callback(self._data)
             except:
-                print(traceback.format_exc())
+                print traceback.format_exc()
                 pass
 
     def _memory_limit(self):
@@ -123,7 +123,7 @@ class Scraper(object):
             try:
                 self._memory_limit_callback(self._data)
             except:
-                print(traceback.format_exc())
+                print traceback.format_exc()
                 pass
 
     def _error(self, error_text):
@@ -131,7 +131,7 @@ class Scraper(object):
             try:
                 self._error_callback(self._data, error_text)
             except:
-                print(traceback.format_exc())
+                print traceback.format_exc()
                 pass
 
     def _reset_scraper(self):
@@ -162,7 +162,7 @@ class Scraper(object):
     def start(self):
         
         if self._DEBUG == True:
-            print("Starting scraper ...")        
+            print "Starting scraper ..."        
 
         if self._data_loaded == False:
             raise Exception("URL Data not set.")
@@ -300,7 +300,7 @@ class Scraper(object):
                     except:
                         continue
                     
-                    full_url = urllib.parse.urljoin(target_url['url'], raw_url)
+                    full_url = urlparse.urljoin(target_url['url'], raw_url)
 
                     match = self._check_match(full_url)
 
@@ -316,7 +316,7 @@ class Scraper(object):
                     page_urls.append(url)
 
         except:
-            print(traceback.format_exc())
+            print traceback.format_exc()
             pass
 
         return page_urls
@@ -360,24 +360,24 @@ class Scraper(object):
                 if try_count == self._data['max_type_try_count']:
                     # if we've tried the max number of times, then just downlaod
                     # the entire file to type it
-                    req = urllib.request.Request(quoted)
+                    req = urllib2.Request(quoted)
                 else:
                     header_size += self._data['file_header_size']
                     headers = {
                         'Range': 'byte=0-%i' % header_size,
                         'User-Agent': '%s (typing link)' % self.__user_agent,
                     }
-                    req = urllib.request.Request(quoted, headers=headers)
+                    req = urllib2.Request(quoted, headers=headers)
                 try:
-                    open_url = urllib.request.urlopen(req,timeout=5)
+                    open_url = urllib2.urlopen(req,timeout=5)
                     headers = open_url.info()
                     payload = open_url.read(
                         self._data['file_header_size']
                     )
                     self._data['bandwidth'] += ( len(headers) + len(payload) )
                     document_type = magic.from_buffer(payload, mime=True)
-                except Exception as e:
-                    print('Exception: {0}'.format(e))
+                except Exception, e:
+                    print 'Exception: {0}'.format(e)
                     if '../' in url['url']:
                         url['url'] = url['url'].replace('../','',1)
                     # if this is our last try, and there was an error record the URL as 'bad'
@@ -392,8 +392,8 @@ class Scraper(object):
         self._urlcheck.insert_url(url['url'], document_type)
         self._new_url(url)
         if self._DEBUG == True:
-            print("{0} : {1}".format(document_type, url['url']))
-            print(("Scraper: Bandwidth: {1} Bytes, URL Count: {2}, " \
+            print "{0} : {1}".format(document_type, url['url'])
+            print ("Scraper: Bandwidth: {1} Bytes, URL Count: {2}, " \
                 "Document Count: {3}, Ignored Count: {4}, Try Count: {5}.".format(
                     None, #resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
                     self._data['bandwidth'],
@@ -402,6 +402,6 @@ class Scraper(object):
                     len(self._data['documents']),
                     self._data['ignored_count'],
                     try_count,
-                )))
-            print("\n")
+                ))
+            print "\n"
         return document_type

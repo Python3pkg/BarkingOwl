@@ -48,7 +48,7 @@ class GlobalShutdown():
         #self.bus_access.tsleep(1)
 
         if self._DEBUG == True:
-            print("GlobalShutdown.__init__(): init complete.")
+            print "GlobalShutdown.__init__(): init complete."
 
     def shutdown(self):
         """
@@ -56,7 +56,7 @@ class GlobalShutdown():
         """
 
         if self._DEBUG == True:
-            print("GlobalShutdown.shutdown(): sending shutdown command") 
+            print "GlobalShutdown.shutdown(): sending shutdown command" 
 
         message = {
             'shutdown_datetime': str(datetime.datetime.now())
@@ -77,14 +77,14 @@ class GlobalShutdown():
         )
 
         if self._DEBUG == True:
-            print("GlobalShutdown.shutdown(): shutdown message sent successfully.")
+            print "GlobalShutdown.shutdown(): shutdown message sent successfully."
 
     def _reqcallback(self,payload): #ch,method,properties,body):
         pass
 
 if __name__ == '__main__':
 
-    print('Sending Global Shutdown Broadcast ...')
+    print 'Sending Global Shutdown Broadcast ...'
 
     globalshutdown = GlobalShutdown(
         address='localhost',
@@ -96,4 +96,4 @@ if __name__ == '__main__':
 
     globalshutdown.shutdown()
 
-    print('Exiting.')
+    print 'Exiting.'

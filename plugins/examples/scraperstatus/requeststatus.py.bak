@@ -14,7 +14,7 @@ class RequestStatus(threading.Thread):
 
         self.uid = str(uuid.uuid4())
 
-        print("Loading ...")
+        print "Loading ..."
 
         #setup message bus
         self.reqcon = pika.BlockingConnection(pika.ConnectionParameters(host=address))
@@ -30,7 +30,7 @@ class RequestStatus(threading.Thread):
         self.respchan = self.respcon.channel()
         self.respchan.exchange_declare(exchange=self.exchange,type='fanout')
 
-        print("Done.")
+        print "Done."
 
     def sendrequest(self):
         isodatetime = strftime("%Y-%m-%d %H:%M:%S")
@@ -45,7 +45,7 @@ class RequestStatus(threading.Thread):
         }
         jbody = simplejson.dumps(payload)
         self.respchan.basic_publish(exchange=self.exchange,routing_key='',body=jbody)
-        print("Status Request Sent.")
+        print "Status Request Sent."
         threading.Timer(10, self.sendrequest).start()
 
     def start(self):
@@ -58,7 +58,7 @@ class RequestStatus(threading.Thread):
     def reqcallback(self,ch,method,properties,body):
         response = simplejson.loads(body)
         if response['command'] == 'scraper_status_simple':
-            print("{0}:\n\tBusy: {1}\n\tLink Count: {2}\n\tProcessed Count: {3}\n\tBad Link Count: {4}\n\tTarget URL: {5}\n".format(response['sourceid'],response['message']['busy'],response['message']['linkcount'],response['message']['processedlinkcount'],response['message']['badlinkcount'],response['message']['targeturl']))
+            print "{0}:\n\tBusy: {1}\n\tLink Count: {2}\n\tProcessed Count: {3}\n\tBad Link Count: {4}\n\tTarget URL: {5}\n".format(response['sourceid'],response['message']['busy'],response['message']['linkcount'],response['message']['processedlinkcount'],response['message']['badlinkcount'],response['message']['targeturl'])
 
 def main():
     requeststatus = RequestStatus()

@@ -70,7 +70,7 @@ class ReceiveThread(threading.Thread):
         #self.sleep(5)
 
         if self._DEBUG == True:
-            print("BusAccess.ReceiveThread.run(): starting message consuming ...")
+            print "BusAccess.ReceiveThread.run(): starting message consuming ..."
 
         self._sleeping = False
 
@@ -85,27 +85,27 @@ class ReceiveThread(threading.Thread):
             if self._callback != None:
                 self._callback(response)
                 if self._DEBUG == True:
-                    print("BusAccess.req_callback(): Call back called successfully.")
-        except Exception as e:
-            print("BusAccess.ReceiveThread._req_callback(): error: {0}".format(e))
+                    print "BusAccess.req_callback(): Call back called successfully."
+        except Exception, e:
+            print  "BusAccess.ReceiveThread._req_callback(): error: {0}".format(e)
 
     def stop_listening(self):
         try:
             if self._DEBUG == True:
-                print("BusAccess.ReceiveThread.stop_listening(): Stopping message consuming ...")
+                print "BusAccess.ReceiveThread.stop_listening(): Stopping message consuming ..."
             self.reqchan.basic_cancel(nowait=True)
             self.reqchan.stop_consuming()
             #self.reqcon.close()
             if self._DEBUG == True:
-                print("BusAccess.ReceiveThread.stop_listening(): Message consuming stopped.") 
+                print "BusAccess.ReceiveThread.stop_listening(): Message consuming stopped." 
 
-        except Exception as e:
+        except Exception, e:
             if self._DEBUG == True:
-                print("BusAccess.ReceiveThread.stop_listening(): ERROR: {0}".format(e))
+                print "BusAccess.ReceiveThread.stop_listening(): ERROR: {0}".format(e)
     def sleep(self, duration):
         if not self.reqchan == None:
             if self._DEBUG == True:
-                print("BusAccess.ReceiveThread.sleep(): Sleeping ...")
+                print "BusAccess.ReceiveThread.sleep(): Sleeping ..."
             self._sleeping = True
             self.reqcon.sleep(duration)
             self._sleeping = False
@@ -168,7 +168,7 @@ class TransmitThread(threading.Thread):
         self._started = True
 
         if self._DEBUG == True:
-            print("BusAccess.TransmitThread: Ready!")
+            print "BusAccess.TransmitThread: Ready!"
 
     def send_message(self, command, destination_id, message):
         if self._started == False:
@@ -197,19 +197,19 @@ class TransmitThread(threading.Thread):
                 immediate = False,
             )
             if self._DEBUG == True:
-                print("BusAccess.send_message(): Message sent successfully to message bus.")
+                print "BusAccess.send_message(): Message sent successfully to message bus."
                 #print "BusAccess.send_messsage(): payload: {0}".format(payload)
             success = True
-        except Exception as e:
+        except Exception, e:
             if self._DEBUG == True:
-                print("BusAccess.TransmitThread.send_message(): ERROR: {0}".format(e))
-                print(traceback.format_exc())
-                print("BusAccess.TransmitThread.send_message(): Error Payload Command: {0}".format(command))
+                print "BusAccess.TransmitThread.send_message(): ERROR: {0}".format(e)
+                print traceback.format_exc()
+                print "BusAccess.TransmitThread.send_message(): Error Payload Command: {0}".format(command)
 
     def sleep(self, duration):
         if not self.respchan == None:
             if self._DEBUG == True:
-                print("BusAccess.TransmitThread.sleep(): Sleeping ...")
+                print "BusAccess.TransmitThread.sleep(): Sleeping ..."
             self._sleeping = True
             self.respcon.sleep(duration)
             self._sleeping = False
@@ -238,7 +238,7 @@ class BusAccess(object):
         self._DEBUG = DEBUG
 
         if self._DEBUG == True:
-            print("BusAccess.__init__(): starting transmit thread ...") 
+            print "BusAccess.__init__(): starting transmit thread ..." 
         self._transmit_thread = TransmitThread(
             uid = self.uid,
             address = self.address,
@@ -249,11 +249,11 @@ class BusAccess(object):
         )
         self._transmit_thread.start()
         if self._DEBUG == True:
-            print("BusAccess.__init__(): transmit thread started successfully.")        
+            print "BusAccess.__init__(): transmit thread started successfully."        
 
         
         if self._DEBUG == True:
-            print("BusAccess.__init__(): starting receive thread ...")
+            print "BusAccess.__init__(): starting receive thread ..."
         self._receive_thread = ReceiveThread(
             uid = self.uid,
             address = self.address,
@@ -264,7 +264,7 @@ class BusAccess(object):
         )
         self._receive_thread.start()
         if self._DEBUG == True:
-            print("BusAccess.__init__(): receive thread started successfully.")
+            print "BusAccess.__init__(): receive thread started successfully."
 
         # wait until we're ready
         while self._receive_thread.ready() == False or \
@@ -273,7 +273,7 @@ class BusAccess(object):
         
 
         if self._DEBUG == True:
-            print("BusAccess.__init__(): init complete.")
+            print "BusAccess.__init__(): init complete."
 
     def set_callback(self, callback):
         self._receive_thread.set_callback(callback)

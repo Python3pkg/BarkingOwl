@@ -1,6 +1,6 @@
 import daemon
 
-from .scraperwrapper import ScraperWrapper
+from scraperwrapper import ScraperWrapper
 
 def StartScraper(address='localhost',exchange='barkingowl'):
     
@@ -16,9 +16,9 @@ def StartScraper(address='localhost',exchange='barkingowl'):
             data = sw.start()
 
             if not data == None:
-                print(data['documents'])
-        except Exception as e:
-            print("ERROR: {0}".format(e))
+                print data['documents']
+        except Exception, e:
+            print "ERROR: {0}".format(e)
 
 if __name__ == '__main__':
 

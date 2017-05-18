@@ -1,11 +1,11 @@
-from .busaccess import BusAccess
+from busaccess import BusAccess
 import uuid
 
 def callback(payload):
-    print("New Payload:")
-    print("---------------------------")
-    print(payload)
-    print("\n\n")
+    print "New Payload:"
+    print "---------------------------"
+    print payload
+    print "\n\n"
     if payload['command'] == 'global_shutdown':
         global ba
         ba.stop_listening()
